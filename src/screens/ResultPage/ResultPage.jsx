@@ -1,13 +1,20 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { View } from "react-native";
 import { Text } from "react-native";
-import { DefaultInput } from "../../components/Inputs/Inputs";
 import { DefaultButton } from "../../components/DefaultButton/DefaultButton";
 import { TouchableOpacity } from "react-native";
 import { style } from "./ResultPageStyle";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { useState } from "react";
 
 export function ResultPage({ navigation, route }) {
-    const { car, user, total, ageResult, yearResult } = route.params
+    const { car, user, total, ageResult, yearResult, baseValue } = route.params
+
+
+    const [checked, setChecked] = useState(false)
+
+
+    const handleCheck = () => setChecked(prev => !prev)
 
     const returnPage = () => navigation.goBack()
 
@@ -23,12 +30,25 @@ export function ResultPage({ navigation, route }) {
 
             <View >
                 <View style={style.resultContainerAll}>
-                    <ResultComponent result={"1000"} title={"Base"} />
-                    <ResultComponent result={ageResult} title={"Por idade"} />
-                    <ResultComponent result={yearResult} title={"Por ano"} />
+                    <ResultComponent checked={checked} result={baseValue} title={"Base"} />
+                    <ResultComponent checked={checked} result={ageResult} title={"Por idade"} />
+                    <ResultComponent checked={checked} result={yearResult} title={"Por ano"} />
                 </View>
-                <ResultComponent title={"Total"} result={total} />
+                <ResultComponent checked={checked} title={"Total"} result={total} />
             </View>
+
+
+            <BouncyCheckbox
+                size={25}
+                fillColor="#5374B6"
+                unfillColor="#FFFFFF"
+                text="Conversão para dólar"
+                textStyle={style.titleResult}
+                iconStyle={{ borderColor: "#5374B6" }}
+                innerIconStyle={{ borderWidth: 2 }}
+                onPress={handleCheck}
+                isChecked={checked}
+            />
 
             <DefaultButton buttonText="Finalizar" />
 
@@ -39,11 +59,14 @@ export function ResultPage({ navigation, route }) {
     )
 }
 
-function ResultComponent({ title, result }) {
+function ResultComponent({ title, result, checked }) {
+
+    const resultText = checked ? `$ ${result / 5}` : `R$ ${result}`
+
     return (
         <View style={style.resultContainer}>
             <Text style={style.titleResult}>{title}</Text>
-            <Text style={style.titleResult}>R$ {result}</Text>
+            <Text style={style.titleResult}>{resultText}</Text>
         </View>
     )
 }
