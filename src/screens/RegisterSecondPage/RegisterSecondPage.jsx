@@ -12,12 +12,12 @@ export function RegisterSecondPage({ navigation, route }) {
     const { user, age } = route.params
     console.log(route.params);
 
-    const [carInfo, setCarInfo] = useState({ car: "", year: "" })
+    const [carInfo, setCarInfo] = useState({ car: "", year: "", carValue: "" })
 
     const returnPage = () => navigation.goBack()
     const nextPage = () => {
         const { car } = carInfo
-        const result = generateSecurity(age, carInfo.year)
+        const result = generateSecurity(age, carInfo.year, carInfo.carValue)
         navigation.navigate("result", { ...route.params, ...carInfo, ...result })
     }
 
