@@ -1,8 +1,12 @@
-export const generateSecurity = (age, year) => {
-    const baseValue = 1000
+export const generateSecurity = (age, year, carValue) => {
+    let baseValue = 1000
     let ageResult = 0
     let yearResult = 0
     let total = 0
+
+    if (+carValue > 100000) baseValue = 2000
+    if (+carValue > 50000 && +carValue <= 10000) baseValue = 1500
+
     if (+age < 22) {
         ageResult = (baseValue * 0.20)
         total = baseValue + ageResult
@@ -29,5 +33,5 @@ export const generateSecurity = (age, year) => {
         total -= yearResult
     }
 
-    return { total, ageResult, yearResult }
+    return { total, ageResult, yearResult, baseValue }
 }
